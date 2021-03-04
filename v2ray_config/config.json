@@ -1,0 +1,64 @@
+{
+    "log": {
+        "access": "/var/log/v2ray/access.log",
+        "error": "/var/log/v2ray/error.log",
+        "loglevel": "error"
+    },
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+            {
+                "type": "field",
+                "domain": [
+                    "geosite:category-ads-all"
+                ],
+                "inboundTag": [
+                    "vmess"
+                ],
+                "outboundTag": "blackhole"
+            }
+        ]
+    },
+    "inbounds": [
+        {
+            "listen": "{{server_ip}}",
+            "port": {{server_port}},
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "{{client_id}}",
+                        "level": 0,
+                        "alterId": 64,
+                        "email": "arthur@v2ray.com"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/arthur"
+                }
+            },
+            "tag": "vmess"
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "AsIs"
+            },
+            "tag": "freedom"
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "http"
+                }
+            },
+            "tag": "blackhole"
+        }
+    ]
+}
